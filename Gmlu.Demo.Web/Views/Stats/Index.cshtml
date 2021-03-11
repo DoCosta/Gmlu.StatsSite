@@ -1,0 +1,93 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using Newtonsoft.Json
+@model StatsViewModel
+@*@foreach (var point in @Model.MeasurePoints)
+    {
+        <p>@point.Date - @point.Temp - @point.Humidity</p>
+    }*@
+
+
+<form method="post" asp-controller="Stats" asp-action="Filter">
+    <fieldset>
+        <legend>Bestimmtes Datum:</legend>
+        <div>
+            <label for="Date">Datum eingeben: <br />Format ('dd.mm.yyyy')</label>
+            @*<input type="Date" name="Date" value="" />
+        @Html.ValidationMessage("Date")*@
+            @Html.TextBoxFor(X => X.DateToFilter, null, new { @class = "date" })
+        </div>
+        <div>
+            <p> </p>
+            <label>&nbsp;</label>
+            <input type="submit" value="Submit" class="submit" />
+        </div>
+    </fieldset>
+</form>
+
+
+<div class="form-group input-group-sm">
+    @Html.LabelFor(model => model.DropOffDate)
+    @Html.TextBoxFor(model => model.DropOffDate, new { @class = "form-control datepicker", placeholder = "Enter Drop-off date here..." })
+    @Html.ValidationMessageFor(model => model.DropOffDate)
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<canvas id="myChart" width="400" height="400"></canvas>
+<canvas id="myChart2" width="400" height="400"></canvas>
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+
+            labels: @Html.Raw(JsonConvert.SerializeObject(@Model.GetDates)),
+            datasets: [{
+                label: 'Temperatur in Grad Celsius',
+                borderColor: 'rgb(255, 99, 132)',
+                data: @Html.Raw(JsonConvert.SerializeObject(@Model.GetTemp))
+            }],
+
+            // Configuration options go here
+            options: {}
+        },
+        });
+
+    var ctx2 = document.getElementById('myChart2').getContext('2d');
+    var chart2 = new Chart(ctx2, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+
+            labels: @Html.Raw(JsonConvert.SerializeObject(@Model.GetDates)),
+            datasets: [{
+                    label: 'Luftfeuchtigkeit in %',
+                    borderColor: 'rgb(235, 199, 122)',
+                    data: @Html.Raw(JsonConvert.SerializeObject(@Model.GetHum))
+            }],
+                // Configuration options go here
+                options: {}
+                }
+            }
+    );
+
+    $(document).ready(function () {
+        $(".date").datepicker({ format: 'dd/mm/yyyy', autoclose: true, todayBtn: 'linked' })
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(function () { // will trigger when the document is ready
+        $('.datepicker').datepicker(); //Initialise any date pickers
+    });
+</script>
