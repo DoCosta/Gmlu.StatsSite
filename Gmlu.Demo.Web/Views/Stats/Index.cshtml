@@ -11,15 +11,15 @@
     }*@
 
 
+@* Date Picker *@
 <form method="post" asp-controller="Stats" asp-action="Filter">
+
+    <div>
+
+        <input asp-for="DateToFilter" id="date" type="text" class="form-control" />
+    </div>
+
     <fieldset>
-        <legend>Bestimmtes Datum:</legend>
-        <div>
-            <label for="Date">Datum eingeben: <br />Format ('dd.mm.yyyy')</label>
-            @*<input type="Date" name="Date" value="" />
-        @Html.ValidationMessage("Date")*@
-            @Html.TextBoxFor(X => X.DateToFilter, null, new { @class = "date" })
-        </div>
         <div>
             <p> </p>
             <label>&nbsp;</label>
@@ -29,17 +29,26 @@
 </form>
 
 
-<div class="form-group input-group-sm">
-    @Html.LabelFor(model => model.DropOffDate)
-    @Html.TextBoxFor(model => model.DropOffDate, new { @class = "form-control datepicker", placeholder = "Enter Drop-off date here..." })
-    @Html.ValidationMessageFor(model => model.DropOffDate)
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <canvas id="myChart" width="400" height="400"></canvas>
 <canvas id="myChart2" width="400" height="400"></canvas>
-<script>
+
+@section Scripts {
+
+
+    <script>
+
+        $(function () {
+            $("#date").datepicker({
+                dateFormat: 'dd.mm.yy',
+                pickTime: false,
+                autoclose: true,
+                forceParse: false,
+                calendarWeeks: true,
+                keyboardNavigation: false,
+            });
+        });
+
+
     var ctx = document.getElementById('myChart').getContext('2d');
     var chart = new Chart(ctx, {
         // The type of chart we want to create
@@ -78,16 +87,6 @@
                 options: {}
                 }
             }
-    );
-
-    $(document).ready(function () {
-        $(".date").datepicker({ format: 'dd/mm/yyyy', autoclose: true, todayBtn: 'linked' })
-    });
-
-</script>
-
-<script type="text/javascript">
-    $(function () { // will trigger when the document is ready
-        $('.datepicker').datepicker(); //Initialise any date pickers
-    });
-</script>
+        );
+    </script>
+}
