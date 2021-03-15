@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Gmlu.Demo.Web.Models;
+using Gmlu.Demo.EntityFramework.Models;
 
 namespace Gmlu.Demo.Web.Services
 {
-    public interface IStateService
+    public interface IStatsService
     {
         IEnumerable<MeasurePoint> GetMeasurePoints(
-            DateTime? dateToLoad);
+            DateTime dateToLoad);
     }
 }

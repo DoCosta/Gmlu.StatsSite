@@ -1,17 +1,6 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@using Newtonsoft.Json
+﻿@using Newtonsoft.Json
 @model StatsViewModel
-@*@foreach (var point in @Model.MeasurePoints)
-    {
-        <p>@point.Date - @point.Temp - @point.Humidity</p>
-    }*@
 
-
-@* Date Picker *@
 <form method="post" asp-controller="Stats" asp-action="Filter">
 
     <div>
@@ -28,9 +17,11 @@
     </fieldset>
 </form>
 
-
-<canvas id="myChart" width="400" height="400"></canvas>
-<canvas id="myChart2" width="400" height="400"></canvas>
+@if (Model.MeasurePoints.Any())
+{
+    <canvas id="myChart" width="400" height="400"></canvas>
+    <canvas id="myChart2" width="400" height="400"></canvas>
+}
 
 @section Scripts {
 

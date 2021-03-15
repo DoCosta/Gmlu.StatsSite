@@ -7,13 +7,19 @@ namespace Gmlu.Demo.Web.Controllers
 {
     public class StatsController : Controller
     {
+        private readonly IStatsService _statsService;
+
+        public StatsController(
+            IStatsService statsService)
+        {
+            _statsService = statsService;
+        }
+
         public IActionResult Index()
         {
-            var service = new StateServiceLocal();
-
             var viewModel = new StatsViewModel();
             viewModel.DateToFilter = DateTime.Now;
-            viewModel.MeasurePoints = service
+            viewModel.MeasurePoints = _statsService
                 .GetMeasurePoints(
                     DateTime.Now);
 
@@ -24,9 +30,7 @@ namespace Gmlu.Demo.Web.Controllers
         public IActionResult Filter(
             StatsViewModel viewModel)
         {
-            var service = new StateServiceLocal();
-
-            viewModel.MeasurePoints = service
+            viewModel.MeasurePoints = _statsService
                 .GetMeasurePoints(
                     viewModel.DateToFilter);
 
