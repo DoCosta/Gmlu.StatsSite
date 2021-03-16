@@ -3,27 +3,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using CsvHelper;
+using Gmlu.Demo.EntityFramework.Models;
 using Gmlu.Demo.Web.Models;
 
 namespace Gmlu.Demo.Web.Services
 {
-    public class StateServiceLocal
-        : IStateService
+    public class StatsServiceLocal
+        : IStatsService
     {
         public IEnumerable<MeasurePoint> GetMeasurePoints(
-            DateTime? dateToLoad)
+            DateTime dateToLoad)
         {
             var result = new List<MeasurePoint>();
-            string usedDate;
 
-            if (dateToLoad == null || dateToLoad == default(DateTime))
-            {
-                usedDate = DateTime.Now.ToString("d");
-            }
-            else
-            {
-                usedDate = dateToLoad.Value.ToString("d");
-            }
+            var usedDate = dateToLoad.ToString("d");
 
             //using (var reader = new StreamReader(@"Services\" + CurrentDate.ToString("d") + ".csv"))
             using (var reader = new StreamReader(@"Services\" + usedDate + ".csv"))
@@ -44,7 +37,7 @@ namespace Gmlu.Demo.Web.Services
                             });
                 }
             }
-                
+
             return result;
         }
 
