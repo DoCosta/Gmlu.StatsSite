@@ -12,6 +12,7 @@ namespace Gmlu.Demo.EntityFramework.DataContext
         }
 
         public DbSet<MeasurePoint> MeasurePoints { get; set; }
+        public DbSet<Raspberry> Raspberrys { get; set; }
 
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)

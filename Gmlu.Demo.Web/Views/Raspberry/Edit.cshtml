@@ -1,0 +1,19 @@
+﻿@model RaspberryEditViewModel
+
+<form asp-controller="Raspberry" asp-action="SaveRaspberryChange" method="post">
+    <div class="form-group">
+
+
+        <input type="hidden" asp-for="RaspberryId" id="RaspberryId"/> 
+        <label for="Location"><Br />Location</label>
+        <input type="text" class="form-control" id="Location" asp-for="Location" />
+        <label for="Name"><Br />Name</label>
+        <input type="text" class="form-control" id="Name" asp-for="Name" />
+        <label for="IPadress"><Br />Ip Adress</label>
+        <input type="text" class="form-control" id="IPadress" asp-for="IPadress" />
+
+
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
