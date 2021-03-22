@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Gmlu.Demo.Web.Controllers
@@ -37,22 +38,27 @@ namespace Gmlu.Demo.Web.Controllers
         // POST: RaspberryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection form)
+        public ActionResult Create(RaspberryCreateViewModel newModel)
         {
-            try
-            {
-                var newEntity = new Raspberry();
-                newEntity.IPadress = form["IPadress"];
-                newEntity.Name = form["Name"];
-                newEntity.location = form["Location"];
-                newEntity.RaspberryId = Guid.NewGuid();
-                _context.Raspberrys.Add(newEntity);
-                _context.SaveChanges();
+            if (!ModelState.IsValid)
+                {
+                    return View("Create", newModel);
+                }
+
+                try
+                {
+                    var newEntity = new Raspberry();
+                    newEntity.Name = newModel.Name;
+                    newEntity.location = newModel.Location;
+                    newEntity.IPadress = newModel.IPadress;
+                    newEntity.RaspberryId = Guid.NewGuid();
+                    _context.Raspberrys.Add(newEntity);
+                    _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View("Create", newModel);
             }
         }
 
@@ -74,43 +80,65 @@ namespace Gmlu.Demo.Web.Controllers
         // POST: RaspberryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveRaspberryChange (IFormCollection form)
+        public ActionResult SaveRaspberryChange (RaspberryEditViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", model);
+            }
+
             try
             {
-                Guid id = Guid.Parse(form["RaspberryId"]);
-                var entity = _context.Raspberrys.Find(id);
-                entity.IPadress = form["IPadress"];
-                entity.Name = form["Name"];
-                entity.location = form["Location"];
+                var entity = _context
+                    .Raspberrys
+                    .Find(
+                        model.RaspberryId);
+
+                entity.Name = model.Name;
+                entity.location = model.Location;
+                entity.IPadress = model.IPadress;
+                
                 _context.Raspberrys.Update(entity);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception e)            
             {
-                return View();
+                return View("Edit", model);
             }
         }
 
+
         // GET: RaspberryController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
-            return View();
+            var entity = _context.Raspberrys.Find(id);
+            RaspberryEditViewModel viewModel = new RaspberryEditViewModel()
+            {
+                RaspberryId = entity.RaspberryId,
+                IPadress = entity.IPadress,
+                Location = entity.location,
+                Name = entity.Name
+            };
+            return View(viewModel);
         }
 
         // POST: RaspberryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteRaspberry(IFormCollection form)
         {
             try
             {
+                Guid id = Guid.Parse(form["RaspberryId"]);
+                var entity = _context.Raspberrys.Find(id);
+                _context.Raspberrys.Remove(entity);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
     }

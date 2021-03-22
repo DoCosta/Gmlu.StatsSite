@@ -15,5 +15,16 @@
 
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-success">Create</button>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <form class="m-1 p-1" method="post">
+    </form>
+
+    <style>
+        .input-validation-error {
+            border-color: red;
+        }
+    </style>
 </form>
