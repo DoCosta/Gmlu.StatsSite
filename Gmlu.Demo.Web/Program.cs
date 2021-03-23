@@ -1,9 +1,6 @@
-using System;
-using Gmlu.Demo.EntityFramework.DataContext;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace Gmlu.Demo.Web
 {
@@ -21,6 +18,7 @@ namespace Gmlu.Demo.Web
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+            .UseNLog();
     }
 }
