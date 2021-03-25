@@ -30,7 +30,7 @@ namespace Gmlu.Demo.Web.Services
                         .Add(
                             new MeasurePoint
                             {
-                                Device = "DemoRaspry1",
+                                //Device = "DemoRaspry1",
                                 Date = record.Datum,
                                 Temp = record.Temperatur,
                                 Humidity = record.Humidity

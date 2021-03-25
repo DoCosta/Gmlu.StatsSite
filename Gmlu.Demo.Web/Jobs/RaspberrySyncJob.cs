@@ -1,9 +1,15 @@
 ﻿using Gmlu.Demo.EntityFramework.DataContext;
+using Gmlu.Demo.EntityFramework.Models;
 using Gmlu.Demo.Web.Interfaces.Raspy.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;  
+using System.Threading.Tasks;
 
 namespace Gmlu.Demo.Web.Jobs
 {
@@ -19,7 +25,7 @@ namespace Gmlu.Demo.Web.Jobs
             _logger = logger;
             _context = context;
         }
-             
+
 
         public async Task Run()
         {
@@ -27,12 +33,12 @@ namespace Gmlu.Demo.Web.Jobs
 
             // load all raspberry from database and loop
             // foreach => _context.Raspberry
-            foreach (var data in _context.Raspberrys)
+            foreach (var raspy in _context.Raspberrys.AsNoTracking())
             {
-                var ipaddress = data.IPadress;
+                var ipaddress = raspy.IPadress;
 
                 // Raspberry.IdAdress => $"{http://{idaddress}/}
-                string url = "http://" + ipaddress;
+                string url = "http://" + ipaddress + ":8080";
 
                 // HttpClient
                 HttpClient client = new HttpClient();
@@ -41,13 +47,43 @@ namespace Gmlu.Demo.Web.Jobs
 
                 // response => json
                 string json = await response.Content.ReadAsStringAsync();
-                
-                // json => Deserialize to Object (Newtonsoft.Json) => JsonConverter.DeserializeObject<OBJECT>(json)
-                RaspyData raspberry = JsonConvert.DeserializeObject<RaspyData>(json);
 
-                // save DIFF to Database
-                // _context.MeasurePoints = _context.MeasurePoints.Add();
-                //_context.SaveChanges();
+                // json => Deserialize to Object (Newtonsoft.Json) => JsonConverter.DeserializeObject<OBJECT>(json)
+                var raspberry = JsonConvert.DeserializeObject<List<RaspyData>>(json);
+
+                List<RaspyData> SortedList = raspberry.OrderByDescending(o => o.Datum).ToList();
+
+                foreach (var newMeasurePoint in SortedList)
+                {
+                    var date = Convert.ToDateTime(newMeasurePoint.Datum);
+                    var mp = _context
+                        .MeasurePoints
+                        .SingleOrDefault(
+                        x => x.Date == date
+                          && x.Raspberry.IPadress == raspy.IPadress);
+
+                    if (mp == null)
+                    {
+                        try
+                        {
+                            var entity = new MeasurePoint();
+                            entity.MeasurePointId = Guid.NewGuid();
+                            entity.Date = DateTime.Parse(newMeasurePoint.Datum);
+
+                            entity.Humidity = Decimal.Parse(newMeasurePoint.Humidity, CultureInfo.InvariantCulture);
+                            entity.Temp = Decimal.Parse(newMeasurePoint.Temperatur, CultureInfo.InvariantCulture);
+
+                            entity.RaspberryId = raspy.RaspberryId;
+
+                            _context.MeasurePoints.Add(entity);
+                            _context.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
             }
 
             _logger.LogInformation("RaspberrySyncJob stoped");

@@ -30,10 +30,11 @@ namespace Gmlu.Demo.Web.Controllers
         public IActionResult Filter(
             StatsViewModel viewModel)
         {
+            )
             viewModel.MeasurePoints = _statsService
                 .GetMeasurePoints(
                     viewModel.DateToFilter);
-
+            
             return View("index", viewModel);
         }
 

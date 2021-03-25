@@ -20,6 +20,5 @@ namespace Gmlu.Demo.EntityFramework.Models
         [Required]
         [StringLength(130)]
         public String location { get; set; }
-
     }
 }

@@ -18,6 +18,7 @@ namespace Gmlu.Demo.EntityFramework.DataContext
             ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MeasurePoint>().ToTable("MeasurePoint");
+            modelBuilder.Entity<Raspberry>().ToTable("Raspberry");
         }
     }
 }

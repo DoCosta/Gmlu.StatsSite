@@ -18,8 +18,10 @@ namespace Gmlu.Demo.EntityFramework.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal? Humidity { get; set; }
 
-        [StringLength(128)]
         [Required]
-        public string Device { get; set; }
+        [ForeignKey("RaspberryId")]
+        public virtual Raspberry Raspberry { get; set; }
+
+        public Guid RaspberryId { get; set; }
     }
 }

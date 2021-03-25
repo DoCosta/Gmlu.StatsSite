@@ -27,18 +27,18 @@ namespace Gmlu.Demo.EntityFramework.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Device")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
                     b.Property<decimal?>("Humidity")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("RaspberryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("Temp")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("MeasurePointId");
+
+                    b.HasIndex("RaspberryId");
 
                     b.ToTable("MeasurePoint");
                 });
@@ -58,6 +58,9 @@ namespace Gmlu.Demo.EntityFramework.Migrations
                         .HasColumnType("nvarchar(130)")
                         .HasMaxLength(130);
 
+                    b.Property<int>("TestProperty")
+                        .HasColumnType("int");
+
                     b.Property<string>("location")
                         .IsRequired()
                         .HasColumnType("nvarchar(130)")
@@ -65,7 +68,16 @@ namespace Gmlu.Demo.EntityFramework.Migrations
 
                     b.HasKey("RaspberryId");
 
-                    b.ToTable("Raspberrys");
+                    b.ToTable("Raspberry");
+                });
+
+            modelBuilder.Entity("Gmlu.Demo.EntityFramework.Models.MeasurePoint", b =>
+                {
+                    b.HasOne("Gmlu.Demo.EntityFramework.Models.Raspberry", "Raspberry")
+                        .WithMany()
+                        .HasForeignKey("RaspberryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
