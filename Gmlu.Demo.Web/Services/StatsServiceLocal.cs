@@ -12,6 +12,7 @@ namespace Gmlu.Demo.Web.Services
         : IStatsService
     {
         public IEnumerable<MeasurePoint> GetMeasurePoints(
+            Guid raspberryId,
             DateTime dateToLoad)
         {
             var result = new List<MeasurePoint>();

@@ -7,6 +7,11 @@ namespace Gmlu.Demo.Web.Models
 {
     public class StatsViewModel
     {
+        public StatsViewModel()
+        {
+            Raspberrys = new List<RaspberryStatsViewModel>();
+        }
+
         public List<RaspberryStatsViewModel> Raspberrys { get; set; }
 
         public DateTime DateToFilter { get; set; }

@@ -4,10 +4,6 @@ using Gmlu.Demo.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace Gmlu.Demo.Web.Controllers
 {
@@ -41,19 +37,19 @@ namespace Gmlu.Demo.Web.Controllers
         public ActionResult Create(RaspberryCreateViewModel newModel)
         {
             if (!ModelState.IsValid)
-                {
-                    return View("Create", newModel);
-                }
+            {
+                return View("Create", newModel);
+            }
 
-                try
-                {
-                    var newEntity = new Raspberry();
-                    newEntity.Name = newModel.Name;
-                    newEntity.location = newModel.Location;
-                    newEntity.IPadress = newModel.IPadress;
-                    newEntity.RaspberryId = Guid.NewGuid();
-                    _context.Raspberrys.Add(newEntity);
-                    _context.SaveChanges();
+            try
+            {
+                var newEntity = new Raspberry();
+                newEntity.Name = newModel.Name;
+                newEntity.location = newModel.Location;
+                newEntity.IPadress = newModel.IPadress;
+                newEntity.RaspberryId = Guid.NewGuid();
+                _context.Raspberrys.Add(newEntity);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -64,7 +60,7 @@ namespace Gmlu.Demo.Web.Controllers
 
 
         // GET: RaspberryController/Edit/5
-        public ActionResult Edit (Guid id)
+        public ActionResult Edit(Guid id)
         {
             var entity = _context.Raspberrys.Find(id);
             RaspberryEditViewModel viewModel = new RaspberryEditViewModel()
@@ -80,32 +76,26 @@ namespace Gmlu.Demo.Web.Controllers
         // POST: RaspberryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveRaspberryChange (RaspberryEditViewModel model)
+        public ActionResult SaveRaspberryChange(RaspberryEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View("Edit", model);
             }
 
-            try
-            {
-                var entity = _context
-                    .Raspberrys
-                    .Find(
-                        model.RaspberryId);
+            var entity = _context
+                .Raspberrys
+                .Find(
+                    model.RaspberryId);
 
-                entity.Name = model.Name;
-                entity.location = model.Location;
-                entity.IPadress = model.IPadress;
-                
-                _context.Raspberrys.Update(entity);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            catch(Exception e)            
-            {
-                return View("Edit", model);
-            }
+            entity.Name = model.Name;
+            entity.location = model.Location;
+            entity.IPadress = model.IPadress;
+
+            _context.Raspberrys.Update(entity);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -120,6 +110,7 @@ namespace Gmlu.Demo.Web.Controllers
                 Location = entity.location,
                 Name = entity.Name
             };
+
             return View(viewModel);
         }
 
@@ -136,7 +127,7 @@ namespace Gmlu.Demo.Web.Controllers
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return RedirectToAction(nameof(Index));
             }

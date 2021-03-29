@@ -18,6 +18,7 @@ namespace Gmlu.Demo.Web.Services
         }
 
         public IEnumerable<MeasurePoint> GetMeasurePoints(
+            Guid rspsberryId,
             DateTime dateToLoad)
         {
             var startTime = new DateTime(dateToLoad.Year, dateToLoad.Month, dateToLoad.Day, 0, 0, 0);
@@ -27,7 +28,8 @@ namespace Gmlu.Demo.Web.Services
                 .MeasurePoints
                 .Where(
                     x => x.Date > startTime
-                      && x.Date < endTime)
+                      && x.Date < endTime
+                      && x.RaspberryId == rspsberryId)
                 .OrderBy(
                     x => x.Date);
 

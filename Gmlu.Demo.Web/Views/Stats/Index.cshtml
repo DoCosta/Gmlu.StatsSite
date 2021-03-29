@@ -1,5 +1,5 @@
 ﻿@using Newtonsoft.Json
-@model RaspberryStatsViewModel
+@model StatsViewModel
 
 <form method="post" asp-controller="Stats" asp-action="Filter">
 
@@ -17,11 +17,10 @@
     </fieldset>
 </form>
 
-@if (Model.MeasurePoints.Any())
+@if (Model.Raspberrys.ToArray()[0].MeasurePoints.Any())
 {
-    <canvas id="myChart" width="400" height="400"></canvas>
-    <canvas id="myChart2" width="400" height="400"></canvas>
-}
+<canvas id="myChart" width="400" height="400"></canvas>
+                <canvas id="myChart2" width="400" height="400"></canvas>}
 
 @section Scripts {
 
@@ -30,7 +29,7 @@
 
         $(function () {
             $("#date").datepicker({
-                dateFormat: 'mm.dd.yy',
+                dateFormat: 'dd.mm.yy',
                 pickTime: false,
                 autoclose: true,
                 forceParse: false,
@@ -41,20 +40,25 @@
 
 
     var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-
-            labels: @Html.Raw(JsonConvert.SerializeObject(@Model.GetDates)),
-            datasets: [{
-                label: 'Temperatur in Grad Celsius',
-                borderColor: 'rgb(255, 99, 132)',
-                data: @Html.Raw(JsonConvert.SerializeObject(@Model.GetTemp))
-            }],
-
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+            data: {
+                labels: @Html.Raw(JsonConvert.SerializeObject(@Model.Raspberrys.ToArray()[0].GetDates)),
+                datasets: [
+                    @foreach (var raspberry in @Model.Raspberrys)
+                    {
+                         @if (raspberry.MeasurePoints.Any())
+                         {
+                             <text>
+                             {
+                                  label: 'Temperatur in Grad Celsius',
+                                  borderColor: 'rgb(255, 99, 132)',
+                                  data: @Html.Raw(JsonConvert.SerializeObject(raspberry.GetTemp))
+                              },
+                              </text>
+                         }
+                    }],
             // Configuration options go here
             options: {}
         },
@@ -68,12 +72,21 @@
         // The data for our dataset
         data: {
 
-            labels: @Html.Raw(JsonConvert.SerializeObject(@Model.GetDates)),
-            datasets: [{
-                    label: 'Luftfeuchtigkeit in %',
-                    borderColor: 'rgb(235, 199, 122)',
-                    data: @Html.Raw(JsonConvert.SerializeObject(@Model.GetHum))
-            }],
+            labels: @Html.Raw(JsonConvert.SerializeObject(@Model.Raspberrys.ToArray()[0].GetDates)),
+            datasets: [
+                @foreach (var raspberry in @Model.Raspberrys)
+                {
+                    @if (raspberry.MeasurePoints.Any())
+                    {
+                         <text>
+                         {
+                             label: 'Luftfeuchtigkeit in %',
+                             borderColor: 'rgb(255, 99, 132)',
+                             data: @Html.Raw(JsonConvert.SerializeObject(raspberry.GetHum))
+                         },
+                         </text>
+                    }
+                }],
                 // Configuration options go here
                 options: {}
                 }

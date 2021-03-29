@@ -49,7 +49,7 @@ namespace Gmlu.Demo.Web.Jobs
                 string json = await response.Content.ReadAsStringAsync();
 
                 // json => Deserialize to Object (Newtonsoft.Json) => JsonConverter.DeserializeObject<OBJECT>(json)
-                var raspberry = JsonConvert.DeserializeObject<List<RaspyData>>(json);
+                var raspberry = JsonConvert.DeserializeObject<List<RaspyData>>(json); 
 
                 List<RaspyData> SortedList = raspberry.OrderByDescending(o => o.Datum).ToList();
 
@@ -64,26 +64,28 @@ namespace Gmlu.Demo.Web.Jobs
 
                     if (mp == null)
                     {
-                        try
-                        {
-                            var entity = new MeasurePoint();
-                            entity.MeasurePointId = Guid.NewGuid();
-                            entity.Date = DateTime.Parse(newMeasurePoint.Datum);
+                        var entity = new MeasurePoint();
+                        entity.MeasurePointId = Guid.NewGuid();
+                        entity.Date = DateTime.Parse(newMeasurePoint.Datum);
 
-                            entity.Humidity = Decimal.Parse(newMeasurePoint.Humidity, CultureInfo.InvariantCulture);
-                            entity.Temp = Decimal.Parse(newMeasurePoint.Temperatur, CultureInfo.InvariantCulture);
+                        entity.Humidity = Decimal.Parse(newMeasurePoint.Humidity, CultureInfo.InvariantCulture);
+                        entity.Temp = Decimal.Parse(newMeasurePoint.Temperatur, CultureInfo.InvariantCulture);
 
-                            entity.RaspberryId = raspy.RaspberryId;
+                        entity.RaspberryId = raspy.RaspberryId;
 
-                            _context.MeasurePoints.Add(entity);
-                            _context.SaveChanges();
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
+                        _context.MeasurePoints.Add(entity);
                     }
-                }
+                }   
+            }
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError("Failed during save MeasurePoints", ex);
+                throw;
             }
 
             _logger.LogInformation("RaspberrySyncJob stoped");
