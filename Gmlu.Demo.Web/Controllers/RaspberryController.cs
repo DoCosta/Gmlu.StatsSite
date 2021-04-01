@@ -17,6 +17,7 @@ namespace Gmlu.Demo.Web.Controllers
             _context = context;
         }
 
+
         // GET: RaspberryController
         public ActionResult Index()
         {

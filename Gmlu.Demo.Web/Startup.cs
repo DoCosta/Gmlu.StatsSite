@@ -66,6 +66,8 @@ namespace Gmlu.Demo.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
         }
     }
 }
