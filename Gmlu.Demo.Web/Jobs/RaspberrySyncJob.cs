@@ -37,10 +37,14 @@ namespace Gmlu.Demo.Web.Jobs
             {
                 var ipaddress = raspy.IPadress;
 
-                // Raspberry.IdAdress => $"{http://{idaddress}/}
-                string url = "http://" + ipaddress + ":8080";
+                var spezificDate = _context.MeasurePoints.OrderByDescending(x => x.Date).FirstOrDefault();
+                string Date = spezificDate.Date.ToString("yyyy-MM-dd hh:mm:ss");
+                string url = "http://" + ipaddress + ":8080/DataSince/" + Date;
 
-                // HttpClient
+                // Raspberry.IdAdress => $"{http://{idaddress}/}
+                //string url = "http://" + ipaddress + ":8080";
+
+                // HttpClient 
                 HttpClient client = new HttpClient();
                 HttpResponseMessage response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
@@ -49,12 +53,13 @@ namespace Gmlu.Demo.Web.Jobs
                 string json = await response.Content.ReadAsStringAsync();
 
                 // json => Deserialize to Object (Newtonsoft.Json) => JsonConverter.DeserializeObject<OBJECT>(json)
-                var raspberry = JsonConvert.DeserializeObject<List<RaspyData>>(json); 
-
+                var raspberry = JsonConvert.DeserializeObject<List<RaspyData>>(json);
                 List<RaspyData> SortedList = raspberry.OrderByDescending(o => o.Datum).ToList();
+
 
                 foreach (var newMeasurePoint in SortedList)
                 {
+
                     var date = Convert.ToDateTime(newMeasurePoint.Datum);
                     var mp = _context
                         .MeasurePoints
@@ -67,7 +72,6 @@ namespace Gmlu.Demo.Web.Jobs
                         var entity = new MeasurePoint();
                         entity.MeasurePointId = Guid.NewGuid();
                         entity.Date = DateTime.Parse(newMeasurePoint.Datum);
-
                         entity.Humidity = Decimal.Parse(newMeasurePoint.Humidity, CultureInfo.InvariantCulture);
                         entity.Temp = Decimal.Parse(newMeasurePoint.Temperatur, CultureInfo.InvariantCulture);
 
