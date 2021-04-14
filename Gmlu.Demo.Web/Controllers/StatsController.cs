@@ -57,6 +57,7 @@ namespace Gmlu.Demo.Web.Controllers
                 .Select(
                     raspberry => new RaspberryStatsViewModel
                     {
+                        Name = raspberry.Name,
                         MeasurePoints = _statsService
                                     .GetMeasurePoints(
                                         raspberry.RaspberryId,
@@ -68,10 +69,11 @@ namespace Gmlu.Demo.Web.Controllers
                 .Add(
                     new RaspberryStatsViewModel
                     {
+                        Name = $"{list.First().Name}2",
                         MeasurePoints = list
-                        .First()
-                        .MeasurePoints
-                        .Select(x => new MeasurePoint { Date = x.Date, Temp = x.Temp + 2, Humidity = x.Humidity + 2 })
+                            .First()
+                            .MeasurePoints
+                            .Select(x => new MeasurePoint { Date = x.Date, Temp = x.Temp + 2, Humidity = x.Humidity + 2 })
                     });
 
             return list;

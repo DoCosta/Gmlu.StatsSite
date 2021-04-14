@@ -19,6 +19,8 @@ namespace Gmlu.Demo.Web.Models
 
     public class RaspberryStatsViewModel
     {
+        public string Name { get; set; }
+
         public IEnumerable<MeasurePoint> MeasurePoints { get; set; }
 
         public string[] GetDates => MeasurePoints?.Select(x => x.Date.ToString()).ToArray();
