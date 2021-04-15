@@ -6,13 +6,13 @@
 <link href="/css/bootstrap-colorpicker.css" rel="stylesheet">
 
 <div class="demo">
-    <h3>Color Raspy 1</h3>
+    <h2>Color Raspy 1</h2>
     <input id="demo-input" type="text" />
     <p></p>
 </div>
 
 <div class="demo2">
-    <h3>Color Raspy 2</h3>
+    <h2>Color Raspy 2</h2>
     <input id="demo-input2" type="text" />
     <p></p>
 </div>
@@ -21,6 +21,7 @@
 <form method="post" asp-controller="Stats" asp-action="Filter">
 
     <div>
+
         <input asp-for="DateToFilter" id="date" type="text" class="form-control" />
     </div>
 
@@ -43,8 +44,7 @@
 
     <script>
 
-    var color = '#cc0000';
-
+        var color = '#cc0000';
 
         $(function () {
 
@@ -54,38 +54,29 @@
             // Example using an event, to change the color of the #demo div background:
             $('#demo-input').on('colorpickerChange', function (event) {
                 $('#demo').css('background-color', event.color.toString());
-                color = event.color.toString();
-                //debugger;
-                if (document.cookie == null || event.color.toString() != null) {
+                if (document.cookie == null) {
+                    chart.data.datasets[0].borderColor = event.color.toString();
+                    chart2.data.datasets[0].borderColor = event.color.toString();
+                    chart.update();
+                    chart2.update();
+                }
+
+                if (document.cookie != null || event.color.toString() != null) {
                     document.cookie = "color1=" + event.color.toString();
-                    const cookieValue1 = document.cookie
+                    var cookieValue1 = document.cookie
                         .split('; ')
                         .find(row => row.startsWith('color1='))
                         .split('=')[1];
-
                     chart.data.datasets[0].borderColor = cookieValue1;
                     chart2.data.datasets[0].borderColor = cookieValue1;
                     chart.update();
                     chart2.update();
-                    //chart.data.datasets[0].borderColor = event.color.toString();
-                    //chart2.data.datasets[0].borderColor = event.color.toString();
-                    //chart.update();
-                    //chart2.update();
                 }
+                
+                
+                
 
-
-                //if (document.cooke != null) {
-                    
-                //    const cookieValue1 = document.cookie
-                //        .split('; ')
-                //        .find(row => row.startsWith('color1='))
-                //        .split('=')[1];
-
-                //    chart.data.datasets[0].borderColor = cookieValue1;
-                //    chart2.data.datasets[0].borderColor = cookieValue1;
-                //    chart.update();
-                //    chart2.update();
-                //}
+                
             });
 
             // Basic instantiation:
@@ -94,11 +85,15 @@
             // Example using an event, to change the color of the #demo div background:
             $('#demo-input2').on('colorpickerChange', function (event) {
                 $('#demo2').css('background-color', event.color.toString());
-                color = event.color.toString();
-                //debugger;
-                if (document.cookie == null || event.color.toString() != null) {
-                    document.cookie = "color2=" + event.color.toString();
-                    const cookieValue2 = document.cookie
+                
+                chart.data.datasets[1].borderColor = event.color.toString();
+                chart2.data.datasets[1].borderColor = event.color.toString();
+                chart.update();
+                chart2.update();
+
+                if (document.cooke != null) {
+
+                    var cookieValue2 = document.cookie
                         .split('; ')
                         .find(row => row.startsWith('color2='))
                         .split('=')[1];
@@ -106,21 +101,14 @@
                     chart2.data.datasets[1].borderColor = cookieValue2;
                     chart.update();
                     chart2.update();
-                //    chart.data.datasets[1].borderColor = event.color.toString();
-                //    chart2.data.datasets[1].borderColor = event.color.toString();
-                //    chart.update();
-                //    chart2.update();
                 }
-                //if (document.cooke != null) {
-                //    const cookieValue2 = document.cookie
-                //        .split('; ')
-                //        .find(row => row.startsWith('color2='))
-                //        .split('=')[1];
-                //    chart.data.datasets[1].borderColor = cookieValue2;
-                //    chart2.data.datasets[1].borderColor = cookieValue2;
-                //    chart.update();
-                //    chart2.update();
-                //}
+
+                
+                if (document.cookie == null || event.color.toString() != null) {
+                    document.cookie = "color2=" + event.color.toString();
+                }
+
+                
             });
 
             $("#date").datepicker({
@@ -147,8 +135,7 @@
 
                              <text>
                              {
-                                  label: '@raspberry.Name',
-                                  borderColor: color,
+                                label: '@raspberry.Name',
                                   data: @Html.Raw(JsonConvert.SerializeObject(raspberry.GetTemp))
                               },
                               </text>
@@ -181,9 +168,11 @@
                              data: @Html.Raw(JsonConvert.SerializeObject(raspberry.GetHum))
                          },
                          </text>
+                        
                     }
                 }],
                 // Configuration options go here
+
                 options: {}
                 }
             }
