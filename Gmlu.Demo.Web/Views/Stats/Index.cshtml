@@ -1,6 +1,23 @@
 ﻿@using Newtonsoft.Json
 @model StatsViewModel
 
+
+
+<link href="/css/bootstrap-colorpicker.css" rel="stylesheet">
+
+<div class="demo">
+    <h2>Color Raspy 1</h2>
+    <input id="demo-input" type="text" />
+    <p></p>
+</div>
+
+<div class="demo2">
+    <h2>Color Raspy 2</h2>
+    <input id="demo-input2" type="text" />
+    <p></p>
+</div>
+
+
 <form method="post" asp-controller="Stats" asp-action="Filter">
 
     <div>
@@ -17,18 +34,83 @@
     </fieldset>
 </form>
 
-@if (Model.MeasurePoints.Any())
+@if (Model.Raspberrys.ToArray()[0].MeasurePoints.Any())
 {
-    <canvas id="myChart" width="400" height="400"></canvas>
-    <canvas id="myChart2" width="400" height="400"></canvas>
-}
+<canvas id="myChart" width="400" height="400"></canvas>
+                <canvas id="myChart2" width="400" height="400"></canvas>}
 
 @section Scripts {
 
 
     <script>
 
+        var color = '#cc0000';
+
         $(function () {
+
+            // Basic instantiation:
+            $('#demo-input').colorpicker();
+
+            // Example using an event, to change the color of the #demo div background:
+            $('#demo-input').on('colorpickerChange', function (event) {
+                $('#demo').css('background-color', event.color.toString());
+                if (document.cookie == null) {
+                    chart.data.datasets[0].borderColor = event.color.toString();
+                    chart2.data.datasets[0].borderColor = event.color.toString();
+                    chart.update();
+                    chart2.update();
+                }
+
+                if (document.cookie != null || event.color.toString() != null) {
+                    document.cookie = "color1=" + event.color.toString();
+                    var cookieValue1 = document.cookie
+                        .split('; ')
+                        .find(row => row.startsWith('color1='))
+                        .split('=')[1];
+                    chart.data.datasets[0].borderColor = cookieValue1;
+                    chart2.data.datasets[0].borderColor = cookieValue1;
+                    chart.update();
+                    chart2.update();
+                }
+                
+                
+                
+
+                
+            });
+
+            // Basic instantiation:
+            $('#demo-input2').colorpicker();
+
+            // Example using an event, to change the color of the #demo div background:
+            $('#demo-input2').on('colorpickerChange', function (event) {
+                $('#demo2').css('background-color', event.color.toString());
+                
+                chart.data.datasets[1].borderColor = event.color.toString();
+                chart2.data.datasets[1].borderColor = event.color.toString();
+                chart.update();
+                chart2.update();
+
+                if (document.cooke != null) {
+
+                    var cookieValue2 = document.cookie
+                        .split('; ')
+                        .find(row => row.startsWith('color2='))
+                        .split('=')[1];
+                    chart.data.datasets[1].borderColor = cookieValue2;
+                    chart2.data.datasets[1].borderColor = cookieValue2;
+                    chart.update();
+                    chart2.update();
+                }
+
+                
+                if (document.cookie == null || event.color.toString() != null) {
+                    document.cookie = "color2=" + event.color.toString();
+                }
+
+                
+            });
+
             $("#date").datepicker({
                 dateFormat: 'dd.mm.yy',
                 pickTime: false,
@@ -38,28 +120,33 @@
                 keyboardNavigation: false,
             });
         });
+        var ctx = document.getElementById('myChart').getContext('2d');
+            var chart = new Chart(ctx, {
 
+            // The type of chart we want to create
+            type: 'line',
+            data: {
+                labels: @Html.Raw(JsonConvert.SerializeObject(@Model.Raspberrys.ToArray()[0].GetDates)),
+                datasets: [
+                    @foreach (var raspberry in @Model.Raspberrys)
+                    {
+                         @if (raspberry.MeasurePoints.Any())
+                         {
 
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-
-            labels: @Html.Raw(JsonConvert.SerializeObject(@Model.GetDates)),
-            datasets: [{
-                label: 'Temperatur in Grad Celsius',
-                borderColor: 'rgb(255, 99, 132)',
-                data: @Html.Raw(JsonConvert.SerializeObject(@Model.GetTemp))
-            }],
-
+                             <text>
+                             {
+                                label: '@raspberry.Name',
+                                  data: @Html.Raw(JsonConvert.SerializeObject(raspberry.GetTemp))
+                              },
+                              </text>
+                         }
+                    }],
             // Configuration options go here
             options: {}
         },
         });
 
+    
     var ctx2 = document.getElementById('myChart2').getContext('2d');
     var chart2 = new Chart(ctx2, {
         // The type of chart we want to create
@@ -68,13 +155,24 @@
         // The data for our dataset
         data: {
 
-            labels: @Html.Raw(JsonConvert.SerializeObject(@Model.GetDates)),
-            datasets: [{
-                    label: 'Luftfeuchtigkeit in %',
-                    borderColor: 'rgb(235, 199, 122)',
-                    data: @Html.Raw(JsonConvert.SerializeObject(@Model.GetHum))
-            }],
+            labels: @Html.Raw(JsonConvert.SerializeObject(@Model.Raspberrys.ToArray()[0].GetDates)),
+            datasets: [
+                @foreach (var raspberry in @Model.Raspberrys)
+                {
+                    @if (raspberry.MeasurePoints.Any())
+                    {
+                         <text>
+                         {
+                             label: '@raspberry.Name',
+                             borderColor: color,
+                             data: @Html.Raw(JsonConvert.SerializeObject(raspberry.GetHum))
+                         },
+                         </text>
+                        
+                    }
+                }],
                 // Configuration options go here
+
                 options: {}
                 }
             }

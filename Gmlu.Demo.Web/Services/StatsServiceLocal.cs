@@ -12,6 +12,7 @@ namespace Gmlu.Demo.Web.Services
         : IStatsService
     {
         public IEnumerable<MeasurePoint> GetMeasurePoints(
+            Guid raspberryId,
             DateTime dateToLoad)
         {
             var result = new List<MeasurePoint>();
@@ -30,7 +31,7 @@ namespace Gmlu.Demo.Web.Services
                         .Add(
                             new MeasurePoint
                             {
-                                Device = "DemoRaspry1",
+                                //Device = "DemoRaspry1",
                                 Date = record.Datum,
                                 Temp = record.Temperatur,
                                 Humidity = record.Humidity

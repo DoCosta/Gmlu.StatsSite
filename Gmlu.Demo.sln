@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gmlu.Demo.Web", "Gmlu.Demo.Web\Gmlu.Demo.Web.csproj", "{C0D17561-F80E-4EEF-B072-97BAADA87C60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gmlu.Demo.EntityFramework", "Gmlu.Demo.EntityFramework\Gmlu.Demo.EntityFramework.csproj", "{457FFE62-A708-48FD-9544-B58819586D1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gmlu.Demo.EntityFramework", "Gmlu.Demo.EntityFramework\Gmlu.Demo.EntityFramework.csproj", "{EC1DD0F2-6F14-444E-A5D8-DD8E7389081C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{C0D17561-F80E-4EEF-B072-97BAADA87C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0D17561-F80E-4EEF-B072-97BAADA87C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0D17561-F80E-4EEF-B072-97BAADA87C60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{457FFE62-A708-48FD-9544-B58819586D1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{457FFE62-A708-48FD-9544-B58819586D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{457FFE62-A708-48FD-9544-B58819586D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{457FFE62-A708-48FD-9544-B58819586D1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC1DD0F2-6F14-444E-A5D8-DD8E7389081C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC1DD0F2-6F14-444E-A5D8-DD8E7389081C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC1DD0F2-6F14-444E-A5D8-DD8E7389081C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC1DD0F2-6F14-444E-A5D8-DD8E7389081C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

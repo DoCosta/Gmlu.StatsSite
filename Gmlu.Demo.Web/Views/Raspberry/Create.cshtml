@@ -1,0 +1,30 @@
+﻿@model RaspberryCreateViewModel
+
+<form asp-controller="Raspberry" asp-action="Create" method="post">
+    <div class="form-group">
+
+
+
+        <label for="Location"><Br />Location</label>
+        <input type="text" class="form-control" id="Location" asp-for="Location" />
+        <label for="Name"><Br />Name</label>
+        <input type="text" class="form-control" id="Name" asp-for="Name" />
+        <label for="Ipadress"><Br />Ip Adress</label>
+        <input type="text" class="form-control" id="IPadress" asp-for="IPadress" />
+
+
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <form class="m-1 p-1" method="post">
+    </form>
+
+    <style>
+        .input-validation-error {
+            border-color: red;
+        }
+    </style>
+</form>

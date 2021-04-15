@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Gmlu.Demo.EntityFramework.DataContext;
 using Gmlu.Demo.Web.Services;
 using Microsoft.EntityFrameworkCore;
+using Hangfire;
+using Gmlu.Demo.Web.Jobs;
 
 namespace Gmlu.Demo.Web
 {
@@ -23,6 +25,12 @@ namespace Gmlu.Demo.Web
         {
             services.AddDbContext<StatsContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("StatsDb")));
+
+            services.AddHangfire(
+                config => config.UseSqlServerStorage(Configuration["ConnectionStrings:HangfireConnection"]));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
 
             services.AddScoped<IStatsService, StatsServiceDb>();
 
@@ -42,12 +50,15 @@ namespace Gmlu.Demo.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
+
+            RecurringJob.AddOrUpdate<RaspberrySyncJob>("RaspberrySyncJob", job => job.Run(), "0 0 */1 * *");
 
             app.UseEndpoints(endpoints =>
             {
@@ -55,6 +66,8 @@ namespace Gmlu.Demo.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
         }
     }
 }

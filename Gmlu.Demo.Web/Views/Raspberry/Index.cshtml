@@ -1,0 +1,41 @@
+﻿@using Gmlu.Demo.EntityFramework.Models
+@model IEnumerable<Raspberry>
+
+<h1>Raspberry</h1>
+<Br />
+<a asp-action="Create">
+    <button type="button" class="btn btn-success">Create</button>
+</a>
+
+
+<Br />
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">IPadress</th>
+            <th scope="col">location</th>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var raspberry in Model) 
+
+        {
+        <tr>
+            <td>@raspberry.IPadress</td>
+            <td>@raspberry.location</td>
+            <td>@raspberry.Name</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@raspberry.RaspberryId">
+                    <button type="button" class="btn btn-info">Edit</button>
+                </a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@raspberry.RaspberryId">
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

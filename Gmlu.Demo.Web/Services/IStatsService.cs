@@ -7,6 +7,7 @@ namespace Gmlu.Demo.Web.Services
     public interface IStatsService
     {
         IEnumerable<MeasurePoint> GetMeasurePoints(
+            Guid RaspberryId,
             DateTime dateToLoad);
     }
 }

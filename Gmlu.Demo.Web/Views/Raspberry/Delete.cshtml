@@ -1,0 +1,21 @@
+﻿@model RaspberryEditViewModel
+
+<form asp-controller="Raspberry" asp-action="DeleteRaspberry" method="post">
+    <div class="form-group">
+
+        <h2>Delete Object:<br /></h2>
+        <label for="RaspberryId"><Br />Raspberry ID</label>
+        <input type="hidden" class="form-control" id="RaspberryId" asp-for="RaspberryId" />
+        <label for="Location"><Br />Location</label>
+        <input type="text" disabled class="form-control" id="Location" asp-for="Location" />
+        <label for="Name"><Br />Name</label>
+        <input type="text" disabled class="form-control" id="Name" asp-for="Name" />
+        <label for="IPadress"><Br />Ip Adress</label>
+        <input type="text" disabled class="form-control" id="IPadress" asp-for="IPadress" />
+
+
+    </div>
+
+    <button type="submit" class="btn btn-danger">Delete</button>
+    
+</form>
