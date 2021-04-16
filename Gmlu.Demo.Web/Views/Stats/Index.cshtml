@@ -51,15 +51,14 @@
             // Example using an event, to change the color of the #demo div background:
             $('#demo-input').on('colorpickerChange', function (event) {
                 $('#demo').css('background-color', event.color.toString());
-                if (document.cookie == null) {
-                    chart.data.datasets[0].borderColor = event.color.toString();
-                    chart2.data.datasets[0].borderColor = event.color.toString();
-                    chart.update();
-                    chart2.update();
-                }
 
-                if (document.cookie != null || event.color.toString() != null) {
-                    document.cookie = "color1=" + event.color.toString();
+                chart.data.datasets[0].borderColor = event.color.toString();
+                chart2.data.datasets[0].borderColor = event.color.toString();
+                chart.update();
+                chart2.update();
+
+                if (document.cooke != null) {
+
                     var cookieValue1 = document.cookie
                         .split('; ')
                         .find(row => row.startsWith('color1='))
@@ -69,6 +68,10 @@
                     chart.update();
                     chart2.update();
                 }
+                if (document.cookie == null || event.color.toString() != null) {
+                    document.cookie = "color1=" + event.color.toString();
+                }
+                                
             });
 
             // Basic instantiation:
@@ -82,7 +85,6 @@
                 chart2.data.datasets[1].borderColor = event.color.toString();
                 chart.update();
                 chart2.update();
-
                 if (document.cooke != null) {
 
                     var cookieValue2 = document.cookie
@@ -95,14 +97,13 @@
                     chart2.update();
                 }
 
-
                 if (document.cookie == null || event.color.toString() != null) {
                     document.cookie = "color2=" + event.color.toString();
                 }
 
 
             });
-
+            
             $("#date").datepicker({
                 dateFormat: 'dd.mm.yy',
                 pickTime: false,
@@ -111,10 +112,37 @@
                 calendarWeeks: true,
                 keyboardNavigation: false,
             });
+
+            if (document.cookie != null) {
+                var cookieValue1 = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('color1='))
+                    .split('=')[1];
+                chart.data.datasets[0].borderColor = cookieValue1;
+                chart2.data.datasets[0].borderColor = cookieValue1;
+                chart.update();
+                chart2.update();
+            }
+
+            if (document.cookie != null) {
+                var cookieValue2 = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('color2='))
+                    .split('=')[1];
+                chart.data.datasets[1].borderColor = cookieValue2;
+                chart2.data.datasets[1].borderColor = cookieValue2;
+                chart.update();
+                chart2.update();
+            }
         });
+
+
+        
+
+
         var ctx = document.getElementById('myChart').getContext('2d');
             var chart = new Chart(ctx, {
-
+                
             // The type of chart we want to create
             type: 'line',
             data: {
