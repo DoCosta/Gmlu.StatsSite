@@ -21,6 +21,8 @@ namespace Gmlu.Demo.Web.Models
     {
         public string Name { get; set; }
 
+        public string Id => Name.Replace(" ", string.Empty);
+
         public IEnumerable<MeasurePoint> MeasurePoints { get; set; }
 
         public string[] GetDates => MeasurePoints?.Select(x => x.Date.ToString()).ToArray();

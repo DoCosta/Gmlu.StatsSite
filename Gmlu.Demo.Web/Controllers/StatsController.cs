@@ -84,6 +84,20 @@ namespace Gmlu.Demo.Web.Controllers
                         });
             }
 
+            if (list.Any())
+            {
+                list
+                    .Add(
+                        new RaspberryStatsViewModel
+                        {
+                            Name = $"{list.First().Name}3",
+                            MeasurePoints = list
+                                .First()
+                                .MeasurePoints
+                                .Select(x => new MeasurePoint { Date = x.Date, Temp = x.Temp + 1, Humidity = x.Humidity + 1 })
+                        });
+            }
+
             return list;
         }
 
