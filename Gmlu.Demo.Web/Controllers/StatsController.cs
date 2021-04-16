@@ -27,6 +27,11 @@ namespace Gmlu.Demo.Web.Controllers
         {
             var viewModel = new StatsViewModel();
 
+            if (!_context.Raspberrys.Any())
+            {
+                return RedirectToAction("Index", "Raspberry");
+            }
+            
             viewModel.Raspberrys = GetRaspberryStatsViewModel(
                 DateTime.Now);
 
@@ -65,16 +70,33 @@ namespace Gmlu.Demo.Web.Controllers
                     })
                 .ToList();
 
-            list
-                .Add(
-                    new RaspberryStatsViewModel
-                    {
-                        Name = $"{list.First().Name}2",
-                        MeasurePoints = list
-                            .First()
-                            .MeasurePoints
-                            .Select(x => new MeasurePoint { Date = x.Date, Temp = x.Temp + 2, Humidity = x.Humidity + 2 })
-                    });
+            if (list.Any())
+            {
+                list
+                    .Add(
+                        new RaspberryStatsViewModel
+                        {
+                            Name = $"{list.First().Name}2",
+                            MeasurePoints = list
+                                .First()
+                                .MeasurePoints
+                                .Select(x => new MeasurePoint { Date = x.Date, Temp = x.Temp + 2, Humidity = x.Humidity + 2 })
+                        });
+            }
+
+            if (list.Any())
+            {
+                list
+                    .Add(
+                        new RaspberryStatsViewModel
+                        {
+                            Name = $"{list.First().Name}3",
+                            MeasurePoints = list
+                                .First()
+                                .MeasurePoints
+                                .Select(x => new MeasurePoint { Date = x.Date, Temp = x.Temp + 1, Humidity = x.Humidity + 1 })
+                        });
+            }
 
             return list;
         }

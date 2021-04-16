@@ -9,6 +9,7 @@ namespace Gmlu.Demo.EntityFramework.DataContext
             DbContextOptions<StatsContext> options)
         : base(options)
         {
+            
         }
 
         public DbSet<MeasurePoint> MeasurePoints { get; set; }
